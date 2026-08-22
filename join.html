@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>과연 팀 초대</title>
+<style>
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+         background:#000; color:#fff; text-align:center; padding:24px;
+         font-family:-apple-system,"Segoe UI","Malgun Gothic",sans-serif; }
+  .wrap { max-width:340px; width:100%; }
+  h1 { font-size:20px; margin:0 0 6px; }
+  p.sub { color:#9ca3af; font-size:14px; margin:0 0 28px; line-height:1.6; }
+  .code { font-size:38px; font-weight:800; letter-spacing:8px; margin:0 0 4px; }
+  .codeLabel { color:#6b7280; font-size:12px; margin:0 0 28px; }
+  a.btn { display:block; background:#fff; color:#000; text-decoration:none; font-weight:700;
+          font-size:16px; padding:16px; border-radius:14px; margin-bottom:12px; }
+  a.alt { display:block; color:#9ca3af; text-decoration:none; font-size:14px; padding:10px; }
+  #install { display:none; margin-top:24px; border-top:1px solid #1f2937; padding-top:20px; }
+  #install p { color:#9ca3af; font-size:13px; margin:0 0 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>과연 팀 초대</h1>
+  <p class="sub">친구가 과팅 팀에 초대했어요.<br>앱에서 열면 코드가 자동으로 입력돼요.</p>
+  <p class="code" id="code">------</p>
+  <p class="codeLabel">초대 코드</p>
+  <a class="btn" id="open" href="#">앱에서 열기</a>
+  <div id="install">
+    <p>앱이 없으면 먼저 설치해주세요.<br>설치 후 이 링크를 다시 누르면 됩니다.</p>
+    <a class="alt" href="https://play.google.com/store/apps/details?id=com.indeed.app">Android · Google Play</a>
+    <a class="alt" href="https://testflight.apple.com/join/RuYH21R8">iPhone · TestFlight</a>
+  </div>
+</div>
+<script>
+  // 코드는 주소에서만 읽는다. 서버도 추적도 없다.
+  var code = (new URLSearchParams(location.search).get('code') || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  var deep = 'indeed://join-team' + (code ? '?code=' + encodeURIComponent(code) : '');
+  if (code) document.getElementById('code').textContent = code;
+  document.getElementById('open').href = deep;
+  // 바로 시도해보고, 페이지에 남아 있으면 앱이 없는 것으로 보고 설치 안내를 띄운다.
+  var tried = Date.now();
+  location.href = deep;
+  setTimeout(function () {
+    if (Date.now() - tried < 2500) document.getElementById('install').style.display = 'block';
+  }, 1200);
+</script>
+</body>
+</html>
